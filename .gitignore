@@ -1,0 +1,10 @@
+env/
+__pycache__/
+*.pyc
+build/
+
+geckodriver.eve
+geckodriver.log
+
+.env
+db.sqlite3
