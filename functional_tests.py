@@ -12,6 +12,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self) -> None:
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element(By.ID, value="task_table")
+        rows = table.find_elements(By.TAG_NAME, value="tr")
+        self.assertIn(row_text, [row.text for row in rows])
+
     # Bob has heard about a new online productivity planner app.
     # He goes to check out the homepage
     def test_can_start_a_list_and_retrieve_it_later(self):
@@ -35,11 +40,10 @@ class NewVisitorTest(unittest.TestCase):
 
         inputbox.send_keys("Write view logic for homepage")
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(10)
-        table = self.browser.find_element(By.ID, value="task_table")
-        rows = table.find_elements(by=By.TAG_NAME, value="tr")
-        self.assertIn("Write tests for homepage", [row.text for row in rows])
-        self.assertIn("Write view logic for homepage", [row.text for row in rows])
+        time.sleep(1)
+
+        self.check_for_row_in_list_table("Write tests for homepage")
+        self.check_for_row_in_list_table("Write view logic for homepage")
         self.fail("Finished the test!")
 
 
