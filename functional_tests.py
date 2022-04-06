@@ -1,8 +1,11 @@
+from django.test import TestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
 import unittest
+
+from planner.models import Task
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -45,6 +48,26 @@ class NewVisitorTest(unittest.TestCase):
         self.check_for_row_in_list_table("Write tests for homepage")
         self.check_for_row_in_list_table("Write view logic for homepage")
         self.fail("Finished the test!")
+
+
+class TaskModelTest(TestCase):
+    def test_saving_and_retrieving_tasks(self):
+        first_task = Task()
+        first_task.text = "first task to do"
+        first_task.save()
+
+        second_task = Task()
+        second_task.text = "2nd task to do"
+        second_task.save()
+
+        saved_tasks = Task.objects.all()
+        self.assertEqual(saved_tasks.count(), 2)
+
+        first_saved_task = saved_tasks[0]
+        second_saved_task = saved_tasks[1]
+
+        self.assertEqual(first_saved_task.text, "first task to do")
+        self.assertEqual(second_saved_task.text, "2nd task to do")
 
 
 if __name__ == "__main__":
