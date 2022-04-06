@@ -19,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
         # client notices the page title is 'Productivity Planner'
         self.assertIn("Productivity Planner", self.browser.title)
         header_text = self.browser.find_element_by_tag_name("h1").text
-        self.assertIn("Productivity Planner For Software Developers ", header_text)
+        self.assertIn("Productivity Planner For Software Developers", header_text)
 
         # client is invited to enter a new task
         inputbox = self.browser.find_element_by_id("new_task")
@@ -31,8 +31,11 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         table = self.browser.find_element_by_id("task_table")
-        rows = table.find_element_by_tag_name("tr")
-        self.assertTrue(any(row.text == "Write tests for homepage" for row in rows))
+        rows = table.find_elements_by_tag_name("tr")
+        self.assertTrue(
+            any(row.text == "Write tests for homepage" for row in rows),
+            "New task did not appear in table",
+        )
         self.fail("Finished the test!")
 
 
