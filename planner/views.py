@@ -5,4 +5,10 @@ from django.http import HttpResponse
 
 
 def home_page(request):
-    return render(request, "home.html")
+    return render(
+        request,
+        "home.html",
+        {
+            "new_task": request.POST.get("task_text", ""),
+        },
+    )

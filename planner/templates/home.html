@@ -6,8 +6,14 @@
 
     <body>
         <h1>Productivity Planner For Software Developers </h1>
-        <input id="new_task" placeholder="Enter a new task" />
+        <form method="post">
+            <input id="new_task" placeholder="Enter a new task" , name="task_text" />
+            {% csrf_token %}
+        </form>
         <table id="task_table">
+            <tr>
+                <td>{{ new_task }}</td>
+            </tr>
         </table>
     </body>
 
