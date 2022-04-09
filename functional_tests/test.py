@@ -1,11 +1,11 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
-import unittest
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
 
@@ -20,7 +20,7 @@ class NewVisitorTest(unittest.TestCase):
     # Bob has heard about a new online productivity planner app.
     # He goes to check out the homepage
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # client notices the page title is 'Productivity Planner'
         self.assertIn("Productivity Planner", self.browser.title)
@@ -33,19 +33,15 @@ class NewVisitorTest(unittest.TestCase):
         # Client enters "Write tests for homepage"
         inputbox.send_keys("Write tests for homepage")
         # When the client hits enter, the page will update, and list
-        # "Write tests for homepage"
-        inputbox.send_keys(Keys.ENTER)
-        # client enters a 2nd task to do
-        inputbox = self.browser.find_element(By.ID, value="new_task")
-
-        inputbox.send_keys("Write view logic for homepage")
-        inputbox.send_keys(Keys.ENTER)
+        inputbox.send_keys(Keys.RETURN)
         time.sleep(1)
+        # client enters a 2nd task to do
+        inputbox1 = self.browser.find_element(By.ID, value="new_task")
+
+        inputbox1.send_keys("Write view logic for homepage")
+        inputbox1.send_keys(Keys.ENTER)
+        time.sleep(5)
 
         self.check_for_row_in_list_table("Write tests for homepage")
         self.check_for_row_in_list_table("Write view logic for homepage")
         self.fail("Finished the test!")
-
-
-if __name__ == "__main__":
-    unittest.main()
