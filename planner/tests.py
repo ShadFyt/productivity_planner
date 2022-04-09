@@ -6,12 +6,32 @@ from planner.models import Task
 class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self):
         response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "home.html")
+
+    def test_only_save_tasks_when_necessary(self):
+        self.client.get("/")
+        self.assertEqual(Task.objects.count(), 0)
 
     def test_can_save_POST_request(self):
         response = self.client.post("/", data={"task_text": "Write tests for homepage"})
-        self.assertIn("Write tests for homepage", response.content.decode())
-        self.assertTemplateUsed(response, "home.html")
+
+        self.assertEqual(Task.objects.count(), 1)
+        new_task = Task.objects.first()
+        self.assertEqual(new_task.text, "Write tests for homepage")
+
+    def test_redirects_after_POST(self):
+        response = self.client.post("/", data={"task_text": "Write tests for homepage"})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/")
+
+    def test_display_all_task(self):
+        Task.objects.create(text="task 1")
+        Task.objects.create(text="task 2")
+
+        response = self.client.get("/")
+        self.assertIn("task 1", response.content.decode())
+        self.assertIn("task 2", response.content.decode())
 
 
 class TaskModelTest(TestCase):

@@ -11,9 +11,11 @@
             {% csrf_token %}
         </form>
         <table id="task_table">
+            {% for task in tasks %}
             <tr>
-                <td>{{ new_task }}</td>
+                <td>{{ task.text }}</td>
             </tr>
+            {% endfor %}
         </table>
     </body>
 
