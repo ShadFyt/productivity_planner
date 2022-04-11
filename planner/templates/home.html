@@ -1,22 +1,40 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+    {% load static tailwind_tags %}
 
     <head>
         <title>Productivity Planner</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% tailwind_css %}
     </head>
 
     <body>
-        <h1>Productivity Planner For Software Developers </h1>
-        <form method="post">
-            <input id="new_task" placeholder="Enter a new task" , name="task_text" />
-            {% csrf_token %}
-        </form>
-        <table id="task_table">
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.text }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="container mx-auto min-h-screen bg-gray-200">
+            <section class=" grid grid-cols-3 border-2">
+                <div class="col-span-3 flex justify-center">
+                    <h1 class=" text-4xl p-2">Productivity Planner For Software Developers </h1>
+                </div>
+                <div class="col-span-3 flex justify-center">
+                    <form method="post" class="p-2 ml-1 mt-2 w-fit  ">
+                        <input class="text-center rounded-md" id="new_task" placeholder="Enter a new task" ,
+                            name="task_text" />
+                        {% csrf_token %}
+                    </form>
+                </div>
+                <div>
+                    <table id="task_table">
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.text }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </section>
+        </div>
     </body>
 
 </html>

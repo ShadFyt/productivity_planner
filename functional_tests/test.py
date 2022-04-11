@@ -2,7 +2,11 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import WebDriverException
+
 import time
+
+MAX_WAIT = 10
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -12,10 +16,18 @@ class NewVisitorTest(LiveServerTestCase):
     def tearDown(self) -> None:
         self.browser.quit()
 
-    def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element(By.ID, value="task_table")
-        rows = table.find_elements(By.TAG_NAME, value="tr")
-        self.assertIn(row_text, [row.text for row in rows])
+    def wait_for_row_in_table(self, row_text):
+        start_time = time.time()
+        while True:
+            try:
+                table = self.browser.find_element(By.ID, value="task_table")
+                rows = table.find_elements(By.TAG_NAME, value="tr")
+                self.assertIn(row_text, [row.text for row in rows])
+                return
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
 
     # Bob has heard about a new online productivity planner app.
     # He goes to check out the homepage
@@ -33,15 +45,15 @@ class NewVisitorTest(LiveServerTestCase):
         # Client enters "Write tests for homepage"
         inputbox.send_keys("Write tests for homepage")
         # When the client hits enter, the page will update, and list
-        inputbox.send_keys(Keys.RETURN)
-        time.sleep(1)
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_table("Write tests for homepage")
+
         # client enters a 2nd task to do
         inputbox1 = self.browser.find_element(By.ID, value="new_task")
 
         inputbox1.send_keys("Write view logic for homepage")
         inputbox1.send_keys(Keys.ENTER)
-        time.sleep(5)
 
-        self.check_for_row_in_list_table("Write tests for homepage")
-        self.check_for_row_in_list_table("Write view logic for homepage")
+        self.wait_for_row_in_table("Write tests for homepage")
+        self.wait_for_row_in_table("Write view logic for homepage")
         self.fail("Finished the test!")
