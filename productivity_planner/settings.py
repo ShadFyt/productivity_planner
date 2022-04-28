@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third-party
     "django_extensions",
+    # python manage.py tailwind start
     "tailwind",
     "theme",
     # my apps
