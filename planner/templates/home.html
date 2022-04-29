@@ -18,17 +18,18 @@
                     <h1 class=" text-4xl p-2">Productivity Planner For Software Developers </h1>
                 </div>
                 <div class="col-span-3 flex justify-center">
-                    <form method="post" class="grid grid-cols-3 w-96 p-2 mt-2 shadow-xl rounded bg-slate-50 ">
+                    <form method="post" class="grid grid-cols-3 w-auto p-2 mt-2 shadow-xl rounded bg-slate-50 ">
                         <div class="col-span-3 justify-center mx-auto">
-                            <div class="inline-flex flex-col align-bottom mr-1 relative">
+                            <div class="inline-flex flex-col align-bottom mr-1 relative focus:outline-none">
                                 <input type="text" id="task" name="task"
-                                    class="peer border-transparent rounded-md mb-2 text-gray-900 placeholder-transparent"
+                                    class="peer mb-2 text-gray-900 placeholder-transparent border-0 focus:outline-none "
                                     placeholder="Enter a new task">
                                 <label for="task" class="absolute 
                                         ml-3
                                         left-0 
                                         -top-5 
-                                        text-sm 
+                                        text-sm
+                                        transition-all 
                                         text-gray-600
                                         peer-placeholder-shown:text-gray-400 
                                         peer-placeholder-shown:text-base
@@ -37,11 +38,13 @@
 
                             </div>
                             <div class=" flex-col mb-2 inline-flex">
-                                <label for="target" class="text-center uppercase">Target</label>
-                                <input id="target" name="target" type="number" class="outline-none 
-                                    focus:outline-none 
-                                    w-16 
-                                    rounded-md ">
+                                <select name="level" id="level"
+                                    class="form-select appearance-none rounded transition ease-in-out text-base">
+                                    <option selected>Select level of importance</option>
+                                    <option value="low" class="text-green-500">Low</option>
+                                    <option value="med" class="text-yellow-500">Medium</option>
+                                    <option value="high" class="text-red-500">High</option>
+                                </select>
                             </div>
                         </div>
                         {% csrf_token %}
